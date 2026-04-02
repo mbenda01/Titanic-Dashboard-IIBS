@@ -1,6 +1,5 @@
-#data/loader.py
+# data/loader.py
 import pandas as pd
-import numpy as np
 import os
 import logging
 
@@ -19,7 +18,7 @@ def load_titanic() -> pd.DataFrame:
             logger.info("CSV local absent — tentative seaborn...")
             import seaborn as sns
             df = sns.load_dataset("titanic")
-        logger.info(f"Dataset chargé : {len(df)} lignes, {len(df.columns)} colonnes")
+        logger.info(f"Dataset charge : {len(df)} lignes, {len(df.columns)} colonnes")
     except Exception as e:
         raise RuntimeError(f"Impossible de charger le dataset Titanic : {e}")
     df = clean_data(df)
@@ -54,6 +53,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
         if row["age"] < 16:
             return "child"
         return "man" if row["sex"] == "male" else "woman"
+
     df["who"] = df.apply(_who, axis=1)
     df["adult_male"] = (df["sex"] == "male") & (df["age"] >= 16)
 
@@ -73,7 +73,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
 def get_age_group(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-    bins   = [0, 12, 18, 35, 60, 100]
-    labels = ["Enfant (0-12)", "Ado (13-18)", "Adulte (19-35)", "Senior (36-60)", "Aîné (60+)"]
+    bins = [0, 12, 18, 35, 60, 100]
+    labels = ["Enfant (0-12)", "Ado (13-18)", "Adulte (19-35)", "Senior (36-60)", "Aine (60+)"]
     df["age_group"] = pd.cut(df["age"], bins=bins, labels=labels, right=True)
     return df

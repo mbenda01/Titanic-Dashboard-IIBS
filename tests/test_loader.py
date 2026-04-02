@@ -1,4 +1,4 @@
-#tests/test_loader.py
+# tests/test_loader.py
 import sys
 import os
 import pytest
@@ -6,7 +6,7 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
-from data.loader import load_titanic, clean_data, get_age_group
+from data.loader import load_titanic, clean_data, get_age_group  # noqa: E402
 
 
 @pytest.fixture(scope="module")
@@ -60,29 +60,33 @@ class TestCleanData:
 
     def test_deck_column_removed(self, df):
         assert "deck" not in df.columns, \
-            "La colonne 'deck' n'a pas été supprimée"
+            "La colonne 'deck' n'a pas ete supprimee"
 
     def test_age_within_range(self, df):
-        assert df["age"].min() >= 0, "Âge négatif détecté"
-        assert df["age"].max() <= 120, f"Âge impossible : {df['age'].max()}"
+        assert df["age"].min() >= 0, "Age negatif detecte"
+        assert df["age"].max() <= 120, f"Age impossible : {df['age'].max()}"
 
     def test_fare_not_negative(self, df):
-        assert (df["fare"] >= 0).all(), "Tarif négatif détecté"
+        assert (df["fare"] >= 0).all(), "Tarif negatif detecte"
 
     def test_clean_data_preserves_rows(self):
-        import pandas as pd, numpy as np, os
         cache = os.path.expanduser("~/seaborn-data/titanic.csv")
-        raw = pd.read_csv(cache) if os.path.exists(cache) else __import__('seaborn').load_dataset("titanic")
+        if os.path.exists(cache):
+            raw = pd.read_csv(cache)
+        else:
+            raw = __import__('seaborn').load_dataset("titanic")
         cleaned = clean_data(raw)
         assert len(cleaned) == len(raw), \
-            f"Des lignes ont été supprimées : {len(raw)} → {len(cleaned)}"
+            f"Des lignes ont ete supprimees : {len(raw)} -> {len(cleaned)}"
 
     def test_clean_data_returns_copy(self):
-        import pandas as pd, os
         cache = os.path.expanduser("~/seaborn-data/titanic.csv")
-        raw = pd.read_csv(cache) if os.path.exists(cache) else __import__('seaborn').load_dataset("titanic")
+        if os.path.exists(cache):
+            raw = pd.read_csv(cache)
+        else:
+            raw = __import__('seaborn').load_dataset("titanic")
         cleaned = clean_data(raw)
-        assert cleaned is not raw, "clean_data retourne la même référence"
+        assert cleaned is not raw, "clean_data retourne la meme reference"
 
 
 class TestGetAgeGroup:
@@ -96,15 +100,15 @@ class TestGetAgeGroup:
 
     def test_age_group_expected_categories(self, df_with_age_groups):
         expected = {"Enfant (0-12)", "Ado (13-18)", "Adulte (19-35)",
-                    "Senior (36-60)", "Aîné (60+)"}
+                    "Senior (36-60)", "Aine (60+)"}
         actual = set(df_with_age_groups["age_group"].cat.categories)
-        assert expected == actual, f"Catégories inattendues : {actual}"
+        assert expected == actual, f"Categories inattendues : {actual}"
 
     def test_original_df_unchanged(self, df):
         original_cols = set(df.columns)
         get_age_group(df)
         assert set(df.columns) == original_cols, \
-            "Le DataFrame original a été modifié"
+            "Le DataFrame original a ete modifie"
 
 
 class TestBasicStats:
@@ -124,4 +128,4 @@ class TestBasicStats:
         class1 = df[df["pclass"] == 1]["survived"].mean()
         class3 = df[df["pclass"] == 3]["survived"].mean()
         assert class1 > class3, \
-            "1ère classe n'a pas un meilleur taux que 3ème (inattendu)"
+            "1ere classe n'a pas un meilleur taux que 3eme (inattendu)"
