@@ -130,7 +130,13 @@ jobs:
 
       - name: Déploiement via docker-compose
         run: |
-          echo "Image ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }} prête"
-          echo "docker-compose pull && docker-compose up -d"
-          # En production, utiliser une action SSH vers votre serveur :
-          # ssh user@server "cd /app && docker-compose pull && docker-compose up -d"
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          docker stop titanic-dashboard || true
+          docker rm titanic-dashboard || true
+          docker run -d \
+            --name titanic-dashboard \
+            -p 8501:8501 \
+            -v ./logs:/app/logs \
+            --restart unless-stopped \
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+          echo "Déploiement terminé ✅"
