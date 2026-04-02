@@ -1,3 +1,4 @@
+# filebeat.yml
 filebeat.inputs:
   - type: log
     enabled: true
