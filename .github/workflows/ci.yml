@@ -54,7 +54,7 @@ jobs:
   generate-report:
     name: "Rapport Profiling"
     runs-on: ubuntu-latest
-    needs: lint-and-test   
+    needs: lint-and-test
 
     steps:
       - uses: actions/checkout@v4
@@ -89,7 +89,7 @@ jobs:
           retention-days: 30
 
       - name: Upload rapport vers Nexus
-        if: ${{ secrets.NEXUS_URL != '' }}
+        if: ${{ vars.NEXUS_ENABLED == 'true' }}
         run: |
           curl -u "${{ secrets.NEXUS_USER }}:${{ secrets.NEXUS_PASSWORD }}" \
             --upload-file titanic-report-v1.0.html \
@@ -98,8 +98,8 @@ jobs:
   docker-build-push:
     name: "Docker Build & Push"
     runs-on: ubuntu-latest
-    needs: lint-and-test  
-    if: github.ref == 'refs/heads/main'  
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - uses: actions/checkout@v4
