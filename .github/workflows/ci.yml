@@ -139,4 +139,4 @@ jobs:
             -v ./logs:/app/logs \
             --restart unless-stopped \
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-          echo "Déploiement terminé ✅"
+          echo "Déploiement terminé "

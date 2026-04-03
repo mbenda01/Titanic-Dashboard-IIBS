@@ -1,4 +1,3 @@
-# tests/test_loader.py
 import sys
 import os
 import pytest

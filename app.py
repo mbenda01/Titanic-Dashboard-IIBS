@@ -1,4 +1,3 @@
-# app.py
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
@@ -18,7 +17,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ── Palette ────────────────────────────────────────────────────────────────────
 C = {
     "bg": "#F0F4F8",
     "surface": "#FFFFFF",
@@ -59,7 +57,6 @@ PLOTLY_BASE = dict(
 )
 
 
-# ── Logger ─────────────────────────────────────────────────────────────────────
 def _get_logger():
     log = logging.getLogger("titanic_app")
     if not log.handlers:
@@ -685,9 +682,6 @@ def page_donnees(df, dff):
     log_event("export_csv", {"rows": len(dff)})
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-# MAIN
-# ══════════════════════════════════════════════════════════════════════════════
 def main():
     df = get_data()
     cls, sex, ages = render_sidebar(df)

@@ -1,4 +1,3 @@
-# filebeat.yml
 filebeat.inputs:
   - type: log
     enabled: true
@@ -12,6 +11,9 @@ filebeat.inputs:
 output.elasticsearch:
   hosts: ["elasticsearch:9200"]
   index: "titanic-logs-%{+yyyy.MM.dd}"
+
+setup.template.name: "titanic-logs"
+setup.template.pattern: "titanic-logs-*"
 
 setup.kibana:
   host: "kibana:5601"

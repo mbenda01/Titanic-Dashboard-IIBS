@@ -1,4 +1,3 @@
-# Dokcerfile
 FROM python:3.11-slim
 
 LABEL maintainer="votre-equipe@example.com"
